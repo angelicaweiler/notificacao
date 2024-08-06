@@ -2,8 +2,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: habitusstart@gmail.com
-    password: qfmw mtro xfdk sllu
+    username:
+    password:
     protocol: smtp
     properties:
       mail:
