@@ -20,5 +20,6 @@ public class EmailController {
     public ResponseEntity<Void> enviarEmail(@RequestBody TarefasDTO dto){
         emailService.enviaEmail(dto);
         return ResponseEntity.ok().build();
+
     }
 }
