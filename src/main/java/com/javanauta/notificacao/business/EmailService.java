@@ -1,9 +1,10 @@
 package com.javanauta.notificacao.business;
 
 import com.javanauta.notificacao.business.dto.TarefasDTO;
+import com.javanauta.notificacao.business.enums.StatusNotificacaoEnum;
 import com.javanauta.notificacao.infrastructure.exceptions.EmailException;
+import com.javanauta.notificacao.infrastructure.message.producer.StatusNotificacaoProducer;
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final TemplateEngine templateEngine;
+    private final StatusNotificacaoProducer producer;
 
     @Value("${envio.email.remetente}")
     public String remetente;
@@ -48,9 +50,14 @@ public class EmailService {
             context.setVariable("descricao", dto.getDescricao());
             String template = templateEngine.process("notificacao", context);
             mimeMessageHelper.setText(template, true);
-            javaMailSender.send(mensagem);
+//            javaMailSender.send(mensagem);
+
+            dto.setStatusNotificacaoEnum(StatusNotificacaoEnum.NOTIFICADO);
+            producer.enviarStatus(dto);
 
         } catch (MessagingException | UnsupportedEncodingException e) {
+            dto.setStatusNotificacaoEnum(StatusNotificacaoEnum.ERRO);
+            producer.enviarStatus(dto);
             throw new EmailException("Erro ao enviar o email ", e.getCause());
         }
     }

@@ -2,16 +2,12 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username:
-    password:
+    username: lojaonneo@gmail.com
+    password: 'azbr xfgi kjlo zvte'
     protocol: smtp
     properties:
       mail:
         smtp:
-          socketFactory:
-            port: 465
-            class: javax.net.ssl.SSLSocketFactory
-            fallback: false
           auth: true
           starttls:
             enable: true
@@ -24,8 +20,8 @@ spring:
 
 envio:
   email:
-    remetente:
+    remetente: lojaonneo@gmail.com
     nomeRemetente: 'Javanauta'
 
 server:
-  port: 8082
+  port: 8089
