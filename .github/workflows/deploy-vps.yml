@@ -24,7 +24,7 @@ jobs:
             
             # limpeza da variavel
             sed -i '/^EMAIL_PASSWORD=/d' .env
-            ed -i '/^EMAIL_USERNAME=/d' .env
+            sed -i '/^EMAIL_USERNAME=/d' .env
             
             # adicionar variavel
             echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
