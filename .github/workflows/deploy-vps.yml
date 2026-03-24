@@ -1,0 +1,35 @@
+name: Deploy VPS
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Deploy na VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          script: |
+            cd /root/app/notificacao
+            git pull origin master
+            cd ..
+            
+            # limpeza da variavel
+            sed -i '/^EMAIL_PASSWORD=/d' .env
+            sed -i '/^EMAIL_USERNAME=/d' .env
+            
+            # adicionar variavel
+            echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
+            echo "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> .env
+            
+            docker compose down --remove-orphans
+            docker compose build --no-cache
+            docker compose up -d --force-recreate
